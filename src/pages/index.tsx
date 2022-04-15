@@ -29,7 +29,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     fetch('https://opendata.resas-portal.go.jp/api/v1/prefectures', {
       headers: { 'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY) },
-      // headers: { 'X-API-KEY': 'qnLslpixyadWxLNcrdKLES7Jke2x4kbNffWCXQan' },
     })
       .then((res) => res.json())
       .then((res) => {
