@@ -12,6 +12,11 @@ interface Prefectures {
   prefName: string
 }
 
+interface PrefPopulation {
+  year: number
+  value: number
+}
+
 const Home: NextPage = () => {
   // 都道府県名
   const [prefectures, setPrefectures] = useState<Prefectures[]>([])
@@ -19,7 +24,7 @@ const Home: NextPage = () => {
   const [choosePref, setChoosePref] = useState<String>('11')
 
   // 選択した都道府県の人口データ
-  const [prefPopulation, setPrefPopulation] = useState({})
+  const [prefPopulation, setPrefPopulation] = useState<PrefPopulation[]>([])
 
   useEffect(() => {
     fetch('https://opendata.resas-portal.go.jp/api/v1/prefectures', {
@@ -73,12 +78,12 @@ const Home: NextPage = () => {
         </ul>
 
         <ul>
-          {/* {prefPopulation &&
+          {prefPopulation &&
             prefPopulation.map((v, i) => (
-              <li key={i} onClick={() => setChoosePref(v.prefCode)}>
-                {v.prefCode}: {v.prefName}
+              <li key={i}>
+                {v.year}: {v.value}
               </li>
-            ))} */}
+            ))}
         </ul>
       </main>
       <footer></footer>
