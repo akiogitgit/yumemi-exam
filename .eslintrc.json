@@ -1,12 +1,11 @@
 {
-  "plugins": ["unused-imports", "tailwindcss", "react-hooks"],
+  "plugins": ["prettier", "unused-imports", "react-hooks"],
   "extends": [
     "next",
     "next/core-web-vitals",
     "plugin:import/recommended",
     "plugin:import/typescript",
     "plugin:import/warnings",
-    "plugin:tailwindcss/recommended",
     "plugin:react-hooks/recommended",
     "prettier"
   ],
