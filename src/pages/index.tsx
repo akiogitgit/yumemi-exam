@@ -21,11 +21,12 @@ const Home: NextPage = () => {
   // 都道府県名
   const [prefectures, setPrefectures] = useState<Prefectures[]>([])
   // 選択する都道府県
-  const [choosePref, setChoosePref] = useState<String>('11')
+  const [choosePref, setChoosePref] = useState<String>('')
 
   // 選択した都道府県の人口データ
   const [prefPopulation, setPrefPopulation] = useState<PrefPopulation[]>([])
 
+  // 都道府県名を取得
   useEffect(() => {
     fetch('https://opendata.resas-portal.go.jp/api/v1/prefectures', {
       headers: { 'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY) },
@@ -38,22 +39,27 @@ const Home: NextPage = () => {
   }, [])
   // console.log(prefectures[0].prefCode)
 
+  // 選択した都道府県のデータを取得
   useEffect(() => {
-    fetch(
-      `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${choosePref}`,
-      // 'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=11',
-      {
-        headers: { 'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY) },
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        setPrefPopulation(res.result.data[0].data)
-      })
+    if (choosePref) {
+      fetch(
+        `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${choosePref}`,
+        // 'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=11',
+        {
+          headers: {
+            'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          setPrefPopulation(res.result.data[0].data)
+        })
+    }
   }, [choosePref])
 
-  console.log(choosePref)
-  console.log(prefPopulation)
+  // console.log(choosePref)
+  // console.log(prefPopulation)
 
   return (
     <div>
@@ -68,21 +74,33 @@ const Home: NextPage = () => {
         <ul className='flex flex-wrap gap-4'>
           {prefectures &&
             prefectures.map((v, i) => (
-              <li className='flex items-center' key={i}>
-                <input type='checkbox' name='' id='' />
-                <span key={i} onClick={() => setChoosePref(String(v.prefCode))}>
+              <li
+                className='flex items-center'
+                key={i}
+                onClick={() => setChoosePref(String(v.prefCode))}
+              >
+                <input type='checkbox' name='' id={v.prefName} />
+                <label htmlFor={v.prefName}>
                   {v.prefCode}. {v.prefName}
-                </span>
+                </label>
               </li>
             ))}
         </ul>
 
-        <ul>
-          {prefPopulation &&
+        <ul className='flex gap-4'>
+          {choosePref &&
+            prefPopulation &&
             prefPopulation.map((v, i) => (
               <li key={i}>
                 {v.year}: {v.value}
               </li>
+              // <div key={i}>
+              //   {v.map((value, index) => (
+              //     <li key={index}>
+              //       {value.year}: {value.value}
+              //     </li>
+              //   ))}
+              // </div>
             ))}
         </ul>
       </main>
