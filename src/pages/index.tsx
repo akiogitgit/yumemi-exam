@@ -21,6 +21,7 @@ const Home: NextPage = () => {
   // 都道府県名
   const [prefectures, setPrefectures] = useState<Prefectures[]>([])
   // 選択する都道府県
+  // ["1", "13", "42"]とかにする
   const [choosePref, setChoosePref] = useState<String>('')
 
   // 選択した都道府県の人口データ
@@ -30,7 +31,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     fetch('https://opendata.resas-portal.go.jp/api/v1/prefectures', {
       headers: { 'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY) },
-      // headers: { 'X-API-KEY': 'qnLslpixyadWxLNcrdKLES7Jke2x4kbNffWCXQan' },
     })
       .then((res) => res.json())
       .then((res) => {
