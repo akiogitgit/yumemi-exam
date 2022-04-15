@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import Highcharts from 'highcharts'
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
   const [prefectures, setPrefectures] = useState<Prefectures[]>([])
   // 選択する都道府県
   // ["1", "13", "42"]とかにする
-  const [choosePref, setChoosePref] = useState<String>('')
+  const [choosePref, setChoosePref] = useState<String[]>([])
 
   // 選択した都道府県の人口データ
   const [prefPopulation, setPrefPopulation] = useState<PrefPopulation[]>([])
@@ -39,12 +39,14 @@ const Home: NextPage = () => {
   }, [])
   // console.log(prefectures[0].prefCode)
 
+  const addPrefecture = (number: string) => {
+    setChoosePref([...choosePref, number])
+  }
   // 選択した都道府県のデータを取得
   useEffect(() => {
-    if (choosePref) {
+    if (choosePref[0]) {
       fetch(
-        `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${choosePref}`,
-        // 'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=11',
+        `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${choosePref[0]}`,
         {
           headers: {
             'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
@@ -58,7 +60,7 @@ const Home: NextPage = () => {
     }
   }, [choosePref])
 
-  // console.log(choosePref)
+  console.log(choosePref)
   // console.log(prefPopulation)
 
   return (
@@ -77,7 +79,8 @@ const Home: NextPage = () => {
               <li
                 className='flex items-center'
                 key={i}
-                onClick={() => setChoosePref(String(v.prefCode))}
+                // onClick={() => setChoosePref(String(v.prefCode))}
+                onChange={() => addPrefecture(String(v.prefCode))}
               >
                 <input type='checkbox' name='' id={v.prefName} />
                 <label htmlFor={v.prefName}>
