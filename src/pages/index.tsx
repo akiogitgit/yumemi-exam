@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import Link from 'next/link'
 import React, { useState, useEffect, useCallback } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -32,10 +31,9 @@ const Home: NextPage = () => {
         setPrefectures(res.result)
       })
   }, [])
-  // console.log(prefectures[0].prefCode)
 
-  // 県が追加された。choosePrefの末尾の県コードの情報を取得
-  const addPrefecuture = (pref_id: string) => {
+  // 都道府県のデータを取得
+  const addPrefData = (pref_id: string) => {
     fetch(
       `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${pref_id}`,
       {
@@ -46,16 +44,15 @@ const Home: NextPage = () => {
     )
       .then((res) => res.json())
       .then((res) => {
-        // setPrefPopulation(res.result.data[0].data)
         setPrefPopulation([...prefPopulation, res.result.data[0].data])
       })
   }
 
-  // 県が削除された。削除する県コードを引数にして消す。
-  const deletePrefecuture = (deleteIndex: number) => {
-    const newData = prefPopulation
+  // 指定された都道府県のデータを削除
+  const deletePrefData = (deleteIndex: number) => {
+    const newData: PrefPopulation[] = prefPopulation
     newData.splice(deleteIndex, 1)
-    setPrefPopulation(newData)
+    setPrefPopulation([...newData])
   }
 
   const changePrefectures = (pref_id: string) => {
@@ -64,45 +61,13 @@ const Home: NextPage = () => {
       const deleteIndex = choosePref.indexOf(pref_id)
       const newArr = choosePref
       newArr.splice(deleteIndex, 1)
-      console.log(newArr)
-
-      const res = choosePref.filter(function (a) {
-        return a !== pref_id
-      })
       setChoosePref(newArr)
-      deletePrefecuture(deleteIndex)
+      deletePrefData(deleteIndex)
       return
     }
     setChoosePref([...choosePref, pref_id])
-    addPrefecuture(pref_id)
+    addPrefData(pref_id)
   }
-
-  // 選択した都道府県のデータを取得
-  // choosePref[]が増えたとき、一番後ろのインデックス都道府県コードを取得する
-  // useEffect(() => {
-  //   if (choosePref[0]) {
-  //     // 毎回全て取得してる チェック入れて、被ってない時のみ取得する
-  //     // setPrefPopulation([])
-  //     choosePref.map((v, i) => {
-  //       fetch(
-  //         `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${choosePref[i]}`,
-  //         {
-  //           headers: {
-  //             'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
-  //           },
-  //         }
-  //       )
-  //         .then((res) => res.json())
-  //         .then((res) => {
-  //           // setPrefPopulation(res.result.data[0].data)
-  //           setPrefPopulation([...prefPopulation, res.result.data[0].data])
-  //         })
-  //     })
-  //   }
-  // }, [choosePref])
-
-  console.log(choosePref)
-  // console.log(prefPopulation)
 
   return (
     <div>
@@ -120,7 +85,6 @@ const Home: NextPage = () => {
               <li
                 className='flex items-center'
                 key={i}
-                // onClick={() => setChoosePref(String(v.prefCode))}
                 onChange={() => changePrefectures(String(v.prefCode))}
               >
                 <input type='checkbox' name='' id={v.prefName} />
@@ -135,9 +99,6 @@ const Home: NextPage = () => {
           {choosePref &&
             prefPopulation &&
             prefPopulation.map((v, i) => (
-              // <li key={i}>
-              //   {v.year}: {v.value}
-              // </li>
               <div key={i}>
                 {v.map((value, index) => (
                   <li key={index}>
