@@ -1,73 +1,13 @@
 import type { NextPage } from 'next'
 import React, { useState, useEffect, useCallback } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
-import Highcharts from 'highcharts'
-import HighchartsExporting from 'highcharts/modules/exporting'
-import HighchartsReact from 'highcharts-react-official'
-
-interface Prefectures {
-  prefCode: number
-  prefName: string
-}
-
-interface PrefPopulation {
-  year: number
-  value: number
-}
+import { PrefectureList } from '../components/PrefectureList'
+import { PrefPopulation } from '../types/prefPopulation'
+import { Chart } from '../components/Chart'
 
 const Home: NextPage = () => {
-  const [prefectures, setPrefectures] = useState<Prefectures[]>([])
-  const [choosePref, setChoosePref] = useState<String[]>([])
+  const [choosePref, setChoosePref] = useState<string[]>([])
   const [prefPopulation, setPrefPopulation] = useState<PrefPopulation[]>([])
-
-  // 都道府県名を取得
-  useEffect(() => {
-    fetch('https://opendata.resas-portal.go.jp/api/v1/prefectures', {
-      headers: { 'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY) },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setPrefectures(res.result)
-      })
-  }, [])
-
-  // 都道府県のデータを取得
-  const addPrefData = (pref_id: string) => {
-    fetch(
-      `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${pref_id}`,
-      {
-        headers: {
-          'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        setPrefPopulation([...prefPopulation, res.result.data[0].data])
-      })
-  }
-
-  // 指定された都道府県のデータを削除
-  const deletePrefData = (deleteIndex: number) => {
-    const newData: PrefPopulation[] = prefPopulation
-    newData.splice(deleteIndex, 1)
-    setPrefPopulation([...newData])
-  }
-
-  const changePrefectures = (pref_id: string) => {
-    // チェックが外れる時
-    if (choosePref.includes(pref_id)) {
-      const deleteIndex = choosePref.indexOf(pref_id)
-      const newArr = choosePref
-      newArr.splice(deleteIndex, 1)
-      setChoosePref(newArr)
-      deletePrefData(deleteIndex)
-      return
-    }
-    setChoosePref([...choosePref, pref_id])
-    addPrefData(pref_id)
-  }
 
   return (
     <div>
@@ -79,35 +19,14 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <ul className='flex flex-wrap gap-4'>
-          {prefectures &&
-            prefectures.map((v, i) => (
-              <li
-                className='flex items-center'
-                key={i}
-                onChange={() => changePrefectures(String(v.prefCode))}
-              >
-                <input type='checkbox' name='' id={v.prefName} />
-                <label htmlFor={v.prefName}>
-                  {v.prefCode}. {v.prefName}
-                </label>
-              </li>
-            ))}
-        </ul>
+        <PrefectureList
+          choosePref={choosePref}
+          setChoosePref={setChoosePref}
+          prefPopulation={prefPopulation}
+          setPrefPopulation={setPrefPopulation}
+        />
 
-        <ul className='flex gap-4'>
-          {choosePref &&
-            prefPopulation &&
-            prefPopulation.map((v, i) => (
-              <div key={i}>
-                {v.map((value, index) => (
-                  <li key={index}>
-                    {value.year}: {value.value}
-                  </li>
-                ))}
-              </div>
-            ))}
-        </ul>
+        <Chart prefPopulation={prefPopulation} />
       </main>
       <footer></footer>
     </div>
