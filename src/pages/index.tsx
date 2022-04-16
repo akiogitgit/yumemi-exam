@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
-import Link from 'next/link'
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import Highcharts from 'highcharts'
@@ -18,14 +17,11 @@ interface PrefPopulation {
 }
 
 const Home: NextPage = () => {
-  // 都道府県名
   const [prefectures, setPrefectures] = useState<Prefectures[]>([])
-  // 選択する都道府県
-  const [choosePref, setChoosePref] = useState<String>('11')
-
-  // 選択した都道府県の人口データ
+  const [choosePref, setChoosePref] = useState<String[]>([])
   const [prefPopulation, setPrefPopulation] = useState<PrefPopulation[]>([])
 
+  // 都道府県名を取得
   useEffect(() => {
     fetch('https://opendata.resas-portal.go.jp/api/v1/prefectures', {
       headers: { 'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY) },
@@ -35,24 +31,43 @@ const Home: NextPage = () => {
         setPrefectures(res.result)
       })
   }, [])
-  // console.log(prefectures[0].prefCode)
 
-  useEffect(() => {
+  // 都道府県のデータを取得
+  const addPrefData = (pref_id: string) => {
     fetch(
-      `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${choosePref}`,
-      // 'https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=11',
+      `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${pref_id}`,
       {
-        headers: { 'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY) },
+        headers: {
+          'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
+        },
       }
     )
       .then((res) => res.json())
       .then((res) => {
-        setPrefPopulation(res.result.data[0].data)
+        setPrefPopulation([...prefPopulation, res.result.data[0].data])
       })
-  }, [choosePref])
+  }
 
-  console.log(choosePref)
-  console.log(prefPopulation)
+  // 指定された都道府県のデータを削除
+  const deletePrefData = (deleteIndex: number) => {
+    const newData: PrefPopulation[] = prefPopulation
+    newData.splice(deleteIndex, 1)
+    setPrefPopulation([...newData])
+  }
+
+  const changePrefectures = (pref_id: string) => {
+    // チェックが外れる時
+    if (choosePref.includes(pref_id)) {
+      const deleteIndex = choosePref.indexOf(pref_id)
+      const newArr = choosePref
+      newArr.splice(deleteIndex, 1)
+      setChoosePref(newArr)
+      deletePrefData(deleteIndex)
+      return
+    }
+    setChoosePref([...choosePref, pref_id])
+    addPrefData(pref_id)
+  }
 
   return (
     <div>
@@ -67,21 +82,30 @@ const Home: NextPage = () => {
         <ul className='flex flex-wrap gap-4'>
           {prefectures &&
             prefectures.map((v, i) => (
-              <li className='flex items-center' key={i}>
-                <input type='checkbox' name='' id='' />
-                <span key={i} onClick={() => setChoosePref(String(v.prefCode))}>
+              <li
+                className='flex items-center'
+                key={i}
+                onChange={() => changePrefectures(String(v.prefCode))}
+              >
+                <input type='checkbox' name='' id={v.prefName} />
+                <label htmlFor={v.prefName}>
                   {v.prefCode}. {v.prefName}
-                </span>
+                </label>
               </li>
             ))}
         </ul>
 
-        <ul>
-          {prefPopulation &&
+        <ul className='flex gap-4'>
+          {choosePref &&
+            prefPopulation &&
             prefPopulation.map((v, i) => (
-              <li key={i}>
-                {v.year}: {v.value}
-              </li>
+              <div key={i}>
+                {v.map((value, index) => (
+                  <li key={index}>
+                    {value.year}: {value.value}
+                  </li>
+                ))}
+              </div>
             ))}
         </ul>
       </main>
