@@ -65,8 +65,6 @@ export const PrefectureList: VFC<Props> = ({
     addPrefData(pref_id)
   }
 
-  console.log(choosePref)
-
   return (
     <div>
       <ul className='flex flex-wrap gap-4'>
@@ -83,7 +81,6 @@ export const PrefectureList: VFC<Props> = ({
               </label>
             </li>
           ))}
-        {choosePref}
       </ul>
     </div>
   )
