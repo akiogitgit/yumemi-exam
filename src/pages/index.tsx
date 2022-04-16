@@ -6,11 +6,10 @@ import Highcharts from 'highcharts'
 import HighchartsExporting from 'highcharts/modules/exporting'
 import HighchartsReact from 'highcharts-react-official'
 import { PrefectureList } from '../components/PrefectureList'
-import { Prefectures } from '../types/prefectures'
 import { PrefPopulation } from '../types/prefPopulation'
+import { Chart } from '../components/Chart'
 
 const Home: NextPage = () => {
-  const [prefectures, setPrefectures] = useState<Prefectures[]>([])
   const [choosePref, setChoosePref] = useState<string[]>([])
   const [prefPopulation, setPrefPopulation] = useState<PrefPopulation[]>([])
 
@@ -31,19 +30,7 @@ const Home: NextPage = () => {
           setPrefPopulation={setPrefPopulation}
         />
 
-        <ul className='flex gap-4'>
-          {choosePref &&
-            prefPopulation &&
-            prefPopulation.map((v, i) => (
-              <div key={i}>
-                {v.map((value, index) => (
-                  <li key={index}>
-                    {value.year}: {value.value}
-                  </li>
-                ))}
-              </div>
-            ))}
-        </ul>
+        <Chart prefPopulation={prefPopulation} />
       </main>
       <footer></footer>
     </div>

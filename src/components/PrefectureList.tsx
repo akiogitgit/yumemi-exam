@@ -9,7 +9,7 @@ interface Props {
   setPrefPopulation: Dispatch<SetStateAction<PrefPopulation[]>>
 }
 
-export const PrefectureList: VFC<Props> = ({
+export const PrefectureList: FC<Props> = ({
   choosePref,
   setChoosePref,
   prefPopulation,
