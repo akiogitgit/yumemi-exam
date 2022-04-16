@@ -5,20 +5,13 @@ import Image from 'next/image'
 import Highcharts from 'highcharts'
 import HighchartsExporting from 'highcharts/modules/exporting'
 import HighchartsReact from 'highcharts-react-official'
-
-interface Prefectures {
-  prefCode: number
-  prefName: string
-}
-
-interface PrefPopulation {
-  year: number
-  value: number
-}
+import { PrefectureList } from '../components/prefectureList'
+import { Prefectures } from '../types/prefectures'
+import { PrefPopulation } from '../types/prefPopulation'
 
 const Home: NextPage = () => {
   const [prefectures, setPrefectures] = useState<Prefectures[]>([])
-  const [choosePref, setChoosePref] = useState<String[]>([])
+  const [choosePref, setChoosePref] = useState<string[]>([])
   const [prefPopulation, setPrefPopulation] = useState<PrefPopulation[]>([])
 
   // 都道府県名を取得
@@ -79,6 +72,13 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
+        <PrefectureList
+          choosePref={choosePref}
+          setChoosePref={setChoosePref}
+          prefPopulation={prefPopulation}
+          setPrefPopulation={setPrefPopulation}
+        />
+        <p>----------------------------------------------------</p>
         <ul className='flex flex-wrap gap-4'>
           {prefectures &&
             prefectures.map((v, i) => (
@@ -94,6 +94,7 @@ const Home: NextPage = () => {
               </li>
             ))}
         </ul>
+        {choosePref}
 
         <ul className='flex gap-4'>
           {choosePref &&
