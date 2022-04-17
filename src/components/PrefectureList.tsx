@@ -1,17 +1,20 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState, VFC } from 'react'
+import { ChoosePrefs } from '../types/choosePrefs'
 import { Prefectures } from '../types/prefectures'
 import { PrefPopulations } from '../types/prefPopulations'
 
 interface Props {
-  choosePref: string[]
-  setChoosePref: Dispatch<SetStateAction<string[]>>
+  // choosePrefs: string[]
+  // setChoosePrefs: Dispatch<SetStateAction<string[]>>
+  choosePrefs: ChoosePrefs[]
+  setChoosePrefs: Dispatch<SetStateAction<ChoosePrefs[]>>
   prefPopulations: PrefPopulations[]
   setPrefPopulations: Dispatch<SetStateAction<PrefPopulations[]>>
 }
 
 export const PrefectureList: FC<Props> = ({
-  choosePref,
-  setChoosePref,
+  choosePrefs,
+  setChoosePrefs,
   prefPopulations,
   setPrefPopulations,
 }) => {
@@ -29,9 +32,9 @@ export const PrefectureList: FC<Props> = ({
   }, [])
 
   // 都道府県のデータを取得
-  const addPrefData = (pref_id: string) => {
+  const addPrefData = (prefCode: string) => {
     fetch(
-      `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${pref_id}`,
+      `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${prefCode}`,
       {
         headers: {
           'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
@@ -51,20 +54,30 @@ export const PrefectureList: FC<Props> = ({
     setPrefPopulations([...newData])
   }
 
-  const changePrefectures = (pref_id: string) => {
+  const changePrefectures = (prefCode: string, prefName: string) => {
+    let flug = true
     // チェックが外れる時
-    if (choosePref.includes(pref_id)) {
-      const deleteIndex = choosePref.indexOf(pref_id)
-      const newArr = choosePref
-      newArr.splice(deleteIndex, 1)
-      setChoosePref(newArr)
-      deletePrefData(deleteIndex)
-      return
+    choosePrefs.forEach((object, index) => {
+      if (object.prefCode === prefCode && flug) {
+        const deleteIndex = index
+        const newArr = choosePrefs
+        newArr.splice(deleteIndex, 1)
+        setChoosePrefs(newArr)
+        deletePrefData(deleteIndex)
+        flug = false
+      }
+    })
+    if (flug) {
+      setChoosePrefs([
+        ...choosePrefs,
+        { prefCode: prefCode, prefName: prefName },
+      ])
+      addPrefData(prefCode)
     }
-    setChoosePref([...choosePref, pref_id])
-    addPrefData(pref_id)
   }
 
+  console.log('chooseP', choosePrefs)
+  console.log('prefP', prefPopulations)
   return (
     <div>
       <ul className='flex flex-wrap gap-4'>
@@ -73,9 +86,9 @@ export const PrefectureList: FC<Props> = ({
             <li
               className='flex items-center'
               key={i}
-              onChange={() => changePrefectures(String(v.prefCode))}
+              onChange={() => changePrefectures(String(v.prefCode), v.prefName)}
             >
-              <input type='checkbox' name='' id={v.prefName} />
+              <input type='checkbox' id={v.prefName} />
               <label htmlFor={v.prefName}>
                 {v.prefCode}. {v.prefName}
               </label>

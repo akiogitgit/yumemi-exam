@@ -25,7 +25,7 @@ export const Chart: FC<Props> = ({ prefPopulations }) => {
     prefPopulations.map((v, i) => {
       series.push({
         // ["東東","神奈川","鳥取"][i]みたいに取りたい
-        name: '都道府県名',
+        name: `都道府県名${i}`,
         data: v.map((v2, i2) => {
           return v2.value
         }),
@@ -33,7 +33,6 @@ export const Chart: FC<Props> = ({ prefPopulations }) => {
       })
     })
 
-    console.log(series)
     // const arrr = prefPopulations.map((a, i) => {
     //   name: "都道府県名",
     //   data: a.map((v, i) => {
@@ -111,7 +110,6 @@ export const Chart: FC<Props> = ({ prefPopulations }) => {
       ],
     },
   }
-  console.log(prefPopulations)
   return (
     <>
       <HighchartsReact highcharts={Highcharts} options={options} />
