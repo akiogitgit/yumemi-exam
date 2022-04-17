@@ -77,8 +77,6 @@ export const PrefectureList: FC<Props> = ({
     }
   }
 
-  console.log('chooseP', choosePrefs)
-  console.log('prefP', prefPopulations)
   return (
     <div>
       <ul className='flex flex-wrap gap-4'>
