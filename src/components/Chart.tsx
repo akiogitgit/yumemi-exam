@@ -10,40 +10,23 @@ interface Props {
 }
 
 export const Chart: FC<Props> = ({ prefPopulations }) => {
-  let yearArr = []
-  // const yearArr = [
-  //   1960, 1965, 1970, 1975, 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015,
-  //   2020, 2025, 2030, 2035, 2040, 2045,
-  // ]
-
-  // 初期値を空にして、型をtypesに書く
   let series: Series[] = []
-  console.log('pref!', prefPopulations)
+  let yearArr: number[] = []
 
+  // 都道府県を選択していたらグラフを生成
   if (prefPopulations[0]) {
-    // yearArr = prefPopulations[0].map((v, i) => {
-    yearArr = prefPopulations[0].data.map((v, i) => {
+    yearArr = prefPopulations[0].data.map((v) => {
       return v.year
     })
-    prefPopulations.map((v, i) => {
+    prefPopulations.map((prefPopulation, i) => {
       series.push({
-        // ["東東","神奈川","鳥取"][i]みたいに取りたい
-        name: v.prefName,
-        // data: v.map((v2, i2) => {
-        data: v.data.map((v2, i2) => {
-          return v2.value
+        name: prefPopulation.prefName,
+        data: prefPopulation.data.map((values) => {
+          return values.value
         }),
         pointPlacement: 'on',
       })
     })
-
-    // const arrr = prefPopulations.map((a, i) => {
-    //   name: "都道府県名",
-    //   data: a.map((v, i) => {
-    //     return v.value
-    //   }),
-    //   pointPlacement: "on"
-    // })
   }
 
   if (typeof Highcharts === 'object') {

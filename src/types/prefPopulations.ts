@@ -4,6 +4,6 @@ export interface Prefdata {
 }
 
 export interface PrefPopulations {
-  data: Prefdata
+  data: Prefdata[]
   prefName: string
 }
