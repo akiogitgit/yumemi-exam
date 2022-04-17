@@ -1,61 +1,33 @@
 import { FC } from 'react'
-import { PrefPopulation } from '../types/prefPopulation'
+import { PrefPopulations } from '../types/prefPopulations'
 import Highcharts from 'highcharts'
 import HighchartsExporting from 'highcharts/modules/exporting'
 import HighchartsReact from 'highcharts-react-official'
+import { Series } from '../types/series.'
 
 interface Props {
-  prefPopulation: PrefPopulation[]
+  prefPopulations: PrefPopulations[]
 }
 
-export const Chart: FC<Props> = ({ prefPopulation }) => {
-  let yearArr = []
-  let series = [{}]
-  if (prefPopulation[0]) {
-    yearArr = prefPopulation[0].map((v, i) => {
+export const Chart: FC<Props> = ({ prefPopulations }) => {
+  let series: Series[] = []
+  let yearArr: number[] = []
+
+  // 都道府県を選択していたらグラフを生成
+  if (prefPopulations[0]) {
+    yearArr = prefPopulations[0].data.map((v) => {
       return v.year
     })
-    // const valueArr = {
-    //   name: '都道府県名',
-    //   data: prefPopulation[0].map((v, i) => {
-    //     return v.value
-    //   }),
-    //   pointPlacement: 'on',
-    // }
-
-    // const dataArr = [prefPopulation.map((v, i) => {
-    //   {
-    //     name: '都道府県名',
-    //     data: prefPopulation[0].map((v2, i2) => {
-    //       return v2.value
-    //     }),
-    //     pointPlacement: 'on',
-    //   },
-    // })]
-    prefPopulation.map((v, i) => {
+    prefPopulations.map((prefPopulation, i) => {
       series.push({
-        name: '都道府県名',
-        data: v.map((v2, i2) => {
-          return v2.value
+        name: prefPopulation.prefName,
+        data: prefPopulation.data.map((values) => {
+          return values.value
         }),
         pointPlacement: 'on',
       })
     })
-
-    console.log(series)
-    // const arrr = prefPopulation.map((a, i) => {
-    //   name: "都道府県名",
-    //   data: a.map((v, i) => {
-    //     return v.value
-    //   }),
-    //   pointPlacement: "on"
-    // })
   }
-  // const yearArr = [
-  //   1960, 1965, 1970, 1975, 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015,
-  //   2020, 2025, 2030, 2035, 2040, 2045,
-  // ]
-  // series name: 都道府県名:string、data: 人口数:string[]
 
   if (typeof Highcharts === 'object') {
     HighchartsExporting(Highcharts)
@@ -125,22 +97,9 @@ export const Chart: FC<Props> = ({ prefPopulation }) => {
       ],
     },
   }
-  console.log(prefPopulation)
   return (
     <>
       <HighchartsReact highcharts={Highcharts} options={options} />
-      <ul className='flex gap-4'>
-        {prefPopulation &&
-          prefPopulation.map((v, i) => (
-            <div key={i}>
-              {v.map((value, index) => (
-                <li key={index}>
-                  {value.year}: {value.value}
-                </li>
-              ))}
-            </div>
-          ))}
-      </ul>
     </>
   )
 }
