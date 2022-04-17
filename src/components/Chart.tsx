@@ -18,15 +18,19 @@ export const Chart: FC<Props> = ({ prefPopulations }) => {
 
   // 初期値を空にして、型をtypesに書く
   let series: Series[] = []
+  console.log('pref!', prefPopulations)
+
   if (prefPopulations[0]) {
-    yearArr = prefPopulations[0].map((v, i) => {
+    // yearArr = prefPopulations[0].map((v, i) => {
+    yearArr = prefPopulations[0].data.map((v, i) => {
       return v.year
     })
     prefPopulations.map((v, i) => {
       series.push({
         // ["東東","神奈川","鳥取"][i]みたいに取りたい
-        name: `都道府県名${i}`,
-        data: v.map((v2, i2) => {
+        name: v.prefName,
+        // data: v.map((v2, i2) => {
+        data: v.data.map((v2, i2) => {
           return v2.value
         }),
         pointPlacement: 'on',

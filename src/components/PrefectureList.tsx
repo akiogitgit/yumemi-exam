@@ -1,15 +1,34 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState, VFC } from 'react'
 import { ChoosePrefs } from '../types/choosePrefs'
 import { Prefectures } from '../types/prefectures'
-import { PrefPopulations } from '../types/prefPopulations'
+import { Prefdata, PrefPopulations } from '../types/prefPopulations'
 
 interface Props {
-  // choosePrefs: string[]
-  // setChoosePrefs: Dispatch<SetStateAction<string[]>>
   choosePrefs: ChoosePrefs[]
   setChoosePrefs: Dispatch<SetStateAction<ChoosePrefs[]>>
   prefPopulations: PrefPopulations[]
   setPrefPopulations: Dispatch<SetStateAction<PrefPopulations[]>>
+}
+// let aaa = [
+//   [
+//     data: [
+//       [year: 1960, value: 10000],
+//       [year: 1345, value: 10000]
+//     ],
+//     prefName: "東京"
+//   ],
+//   [
+//     data: [
+//       [year: 1960, value: 10000],
+//       [year: 1345, value: 10000]
+//     ],
+//     prefName: "東京"
+//   ]
+// ]
+
+interface NewPrefData {
+  data: Prefdata
+  prefName: string
 }
 
 export const PrefectureList: FC<Props> = ({
@@ -32,7 +51,7 @@ export const PrefectureList: FC<Props> = ({
   }, [])
 
   // 都道府県のデータを取得
-  const addPrefData = (prefCode: string) => {
+  const addPrefData = (prefCode: string, prefName: string) => {
     fetch(
       `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${prefCode}`,
       {
@@ -43,8 +62,18 @@ export const PrefectureList: FC<Props> = ({
     )
       .then((res) => res.json())
       .then((res) => {
-        setPrefPopulations([...prefPopulations, res.result.data[0].data])
+        // setPrefPopulations([...prefPopulations, res.result.data[0].data])
+        setPrefPopulations([
+          ...prefPopulations,
+          { data: res.result.data[0].data, prefName: prefName },
+        ])
+        // let newData: PrefPopulations[] = [
+        //   { data: res.result.data[0].data },
+        //   { prefName: prefName },
+        // ]
+        // setPrefPopulations([...prefPopulations, newData])
       })
+    console.log(prefPopulations)
   }
 
   // 指定された都道府県のデータを削除
@@ -72,7 +101,7 @@ export const PrefectureList: FC<Props> = ({
         ...choosePrefs,
         { prefCode: prefCode, prefName: prefName },
       ])
-      addPrefData(prefCode)
+      addPrefData(prefCode, prefName)
     }
   }
 
