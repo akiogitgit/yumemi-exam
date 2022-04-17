@@ -1,19 +1,19 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState, VFC } from 'react'
 import { Prefectures } from '../types/prefectures'
-import { PrefPopulation } from '../types/prefPopulation'
+import { PrefPopulations } from '../types/prefPopulations'
 
 interface Props {
   choosePref: string[]
   setChoosePref: Dispatch<SetStateAction<string[]>>
-  prefPopulation: PrefPopulation[]
-  setPrefPopulation: Dispatch<SetStateAction<PrefPopulation[]>>
+  prefPopulations: PrefPopulations[]
+  setPrefPopulations: Dispatch<SetStateAction<PrefPopulations[]>>
 }
 
 export const PrefectureList: FC<Props> = ({
   choosePref,
   setChoosePref,
-  prefPopulation,
-  setPrefPopulation,
+  prefPopulations,
+  setPrefPopulations,
 }) => {
   const [prefectures, setPrefectures] = useState<Prefectures[]>([])
 
@@ -40,15 +40,15 @@ export const PrefectureList: FC<Props> = ({
     )
       .then((res) => res.json())
       .then((res) => {
-        setPrefPopulation([...prefPopulation, res.result.data[0].data])
+        setPrefPopulations([...prefPopulations, res.result.data[0].data])
       })
   }
 
   // 指定された都道府県のデータを削除
   const deletePrefData = (deleteIndex: number) => {
-    const newData: PrefPopulation[] = prefPopulation
+    const newData: PrefPopulations[] = prefPopulations
     newData.splice(deleteIndex, 1)
-    setPrefPopulation([...newData])
+    setPrefPopulations([...newData])
   }
 
   const changePrefectures = (pref_id: string) => {

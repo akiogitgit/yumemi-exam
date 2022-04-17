@@ -2,12 +2,12 @@ import type { NextPage } from 'next'
 import React, { useState, useEffect, useCallback } from 'react'
 import Head from 'next/head'
 import { PrefectureList } from '../components/PrefectureList'
-import { PrefPopulation } from '../types/prefPopulation'
+import { PrefPopulations } from '../types/prefPopulations'
 import { Chart } from '../components/Chart'
 
 const Home: NextPage = () => {
   const [choosePref, setChoosePref] = useState<string[]>([])
-  const [prefPopulation, setPrefPopulation] = useState<PrefPopulation[]>([])
+  const [prefPopulations, setPrefPopulations] = useState<PrefPopulations[]>([])
 
   return (
     <div>
@@ -22,11 +22,11 @@ const Home: NextPage = () => {
         <PrefectureList
           choosePref={choosePref}
           setChoosePref={setChoosePref}
-          prefPopulation={prefPopulation}
-          setPrefPopulation={setPrefPopulation}
+          prefPopulations={prefPopulations}
+          setPrefPopulations={setPrefPopulations}
         />
 
-        <Chart prefPopulation={prefPopulation} />
+        <Chart prefPopulations={prefPopulations} />
       </main>
       <footer></footer>
     </div>
