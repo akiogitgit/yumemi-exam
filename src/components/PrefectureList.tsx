@@ -54,10 +54,7 @@ export const PrefectureList: FC<Props> = ({
     let flug = true
     prefPopulations.map((object, index) => {
       if (object.prefName === prefName && flug) {
-        const deleteIndex = index
-        const newArr = prefPopulations
-        newArr.splice(deleteIndex, 1)
-        deletePrefData(deleteIndex)
+        deletePrefData(index)
         flug = false
       }
     })
