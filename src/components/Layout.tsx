@@ -16,11 +16,15 @@ export const Layout: FC<Props> = ({ children }) => {
           <script src='https://cdn.tailwindcss.com'></script>
         </Head>
 
-        <header className='w-full bg-gray-300 p-4 text-center text-[25px] font-mono'>
-          人口構成グラフ
-        </header>
+        <body>
+          <header className='w-full bg-gray-300 p-4 text-center text-[25px] font-mono'>
+            人口構成グラフ
+          </header>
 
-        <main className='max-w-[780px] mx-4 md:mx-auto mt-10'>{children}</main>
+          <main className='max-w-[780px] mx-4 md:mx-auto mt-10'>
+            {children}
+          </main>
+        </body>
       </div>
     </div>
   )

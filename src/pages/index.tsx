@@ -11,14 +11,12 @@ const Home: NextPage = () => {
 
   return (
     <Layout>
-      <main>
-        <PrefectureList
-          prefPopulations={prefPopulations}
-          setPrefPopulations={setPrefPopulations}
-        />
+      <PrefectureList
+        prefPopulations={prefPopulations}
+        setPrefPopulations={setPrefPopulations}
+      />
 
-        <Chart prefPopulations={prefPopulations} />
-      </main>
+      <Chart prefPopulations={prefPopulations} />
     </Layout>
   )
 }
