@@ -1,18 +1,13 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
-import { ChoosePrefs } from '../types/choosePrefs'
 import { Prefectures } from '../types/prefectures'
 import { PrefPopulations } from '../types/prefPopulations'
 
 interface Props {
-  choosePrefs: ChoosePrefs[]
-  setChoosePrefs: Dispatch<SetStateAction<ChoosePrefs[]>>
   prefPopulations: PrefPopulations[]
   setPrefPopulations: Dispatch<SetStateAction<PrefPopulations[]>>
 }
 
 export const PrefectureList: FC<Props> = ({
-  choosePrefs,
-  setChoosePrefs,
   prefPopulations,
   setPrefPopulations,
 }) => {
@@ -57,22 +52,13 @@ export const PrefectureList: FC<Props> = ({
 
   const changePrefectures = (prefCode: string, prefName: string) => {
     let flug = true
-    // チェックが外れる時
-    choosePrefs.forEach((object, index) => {
-      if (object.prefCode === prefCode && flug) {
-        const deleteIndex = index
-        const newArr = choosePrefs
-        newArr.splice(deleteIndex, 1)
-        setChoosePrefs(newArr)
-        deletePrefData(deleteIndex)
+    prefPopulations.map((object, index) => {
+      if (object.prefName === prefName && flug) {
+        deletePrefData(index)
         flug = false
       }
     })
     if (flug) {
-      setChoosePrefs([
-        ...choosePrefs,
-        { prefCode: prefCode, prefName: prefName },
-      ])
       addPrefData(prefCode, prefName)
     }
   }
