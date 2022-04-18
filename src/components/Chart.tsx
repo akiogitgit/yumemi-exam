@@ -43,7 +43,7 @@ export const Chart: FC<Props> = ({ prefPopulations }) => {
     },
 
     title: {
-      text: '人口構成',
+      text: '<span class="text-[20px] font-bold">人口構成</span>',
       x: 0,
     },
 
@@ -98,8 +98,10 @@ export const Chart: FC<Props> = ({ prefPopulations }) => {
     },
   }
   return (
-    <>
-      <HighchartsReact highcharts={Highcharts} options={options} />
-    </>
+    <div className='mt-10'>
+      {series[0] && (
+        <HighchartsReact highcharts={Highcharts} options={options} />
+      )}
+    </div>
   )
 }

@@ -64,8 +64,9 @@ export const PrefectureList: FC<Props> = ({
   }
 
   return (
-    <div>
-      <ul className='flex flex-wrap gap-4'>
+    <div className='text-center'>
+      <span className='text-[20px] font-bold'>都道府県</span>
+      <ul className='mt-2 flex flex-wrap gap-4'>
         {prefectures &&
           prefectures.map((v, i) => (
             <li
@@ -74,8 +75,8 @@ export const PrefectureList: FC<Props> = ({
               onChange={() => changePrefectures(String(v.prefCode), v.prefName)}
             >
               <input type='checkbox' id={v.prefName} />
-              <label htmlFor={v.prefName}>
-                {v.prefCode}. {v.prefName}
+              <label htmlFor={v.prefName} className='ml-1'>
+                {v.prefName}
               </label>
             </li>
           ))}
