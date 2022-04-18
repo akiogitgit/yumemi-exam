@@ -20,6 +20,3 @@ Chart.tsx は prefPopulations にデータが入っていたら、グラフを�
 グラフのデータ(series)は、prefPopulations 配列の、data.value を配列にして格納。
 グラフの都道府県名(name)は、prefPopulations 配列の prefName から取得。
 
-## 概要
-
-## 詳細
