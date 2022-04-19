@@ -43,7 +43,7 @@ export const Chart: FC<Props> = ({ prefPopulations }) => {
     },
 
     title: {
-      text: '<span class="text-[20px] font-bold">人口構成</span>',
+      text: '<span class="section-title">人口構成</span>',
       x: 0,
     },
 
@@ -98,10 +98,10 @@ export const Chart: FC<Props> = ({ prefPopulations }) => {
     },
   }
   return (
-    <div className='mt-10'>
+    <section>
       {series[0] && (
         <HighchartsReact highcharts={Highcharts} options={options} />
       )}
-    </div>
+    </section>
   )
 }

@@ -64,23 +64,20 @@ export const PrefectureList: FC<Props> = ({
   }
 
   return (
-    <div className='text-center'>
-      <span className='text-[20px] font-bold'>都道府県</span>
-      <ul className='mt-2 flex flex-wrap gap-4'>
+    <section>
+      <span className='section-title'>都道府県</span>
+      <ul>
         {prefectures &&
           prefectures.map((v, i) => (
             <li
-              className='flex items-center'
               key={i}
               onChange={() => changePrefectures(String(v.prefCode), v.prefName)}
             >
               <input type='checkbox' id={v.prefName} />
-              <label htmlFor={v.prefName} className='ml-1'>
-                {v.prefName}
-              </label>
+              <label htmlFor={v.prefName}>{v.prefName}</label>
             </li>
           ))}
       </ul>
-    </div>
+    </section>
   )
 }
