@@ -6,8 +6,8 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { Prefectures } from '../types/prefectures'
 import { PrefPopulations } from '../types/prefPopulations'
+import { Prefectures } from '../types/prefectures'
 
 interface Props {
   prefPopulations: PrefPopulations[]

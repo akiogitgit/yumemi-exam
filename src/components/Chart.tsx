@@ -1,8 +1,8 @@
+import Highcharts from 'highcharts'
+import HighchartsReact from 'highcharts-react-official'
+import HighchartsExporting from 'highcharts/modules/exporting'
 import { FC } from 'react'
 import { PrefPopulations } from '../types/prefPopulations'
-import Highcharts from 'highcharts'
-import HighchartsExporting from 'highcharts/modules/exporting'
-import HighchartsReact from 'highcharts-react-official'
 import { Series } from '../types/series.'
 
 interface Props {
