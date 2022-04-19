@@ -1,10 +1,9 @@
 import type { NextPage } from 'next'
 import React, { useState } from 'react'
-import Head from 'next/head'
-import { PrefectureList } from '../components/PrefectureList'
-import { PrefPopulations } from '../types/prefPopulations'
 import { Chart } from '../components/Chart'
 import { Layout } from '../components/Layout'
+import { PrefectureList } from '../components/PrefectureList'
+import { PrefPopulations } from '../types/prefPopulations'
 
 const Home: NextPage = () => {
   const [prefPopulations, setPrefPopulations] = useState<PrefPopulations[]>([])

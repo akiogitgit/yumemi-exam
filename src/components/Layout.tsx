@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { FC, ReactNode } from 'react'
+import { ReactNode, FC } from 'react'
 
 interface Props {
   children: ReactNode
