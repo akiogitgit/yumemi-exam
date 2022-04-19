@@ -23,7 +23,7 @@ export const PrefectureList: FC<Props> = ({
   // 都道府県名を取得
   useEffect(() => {
     fetch('https://opendata.resas-portal.go.jp/api/v1/prefectures', {
-      headers: { 'X-API-KEY': process.env.NEXT_PUBLIC_RESAS_APIKEY },
+      headers: { 'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY) },
     })
       .then((res) => res.json())
       .then((res) => {
@@ -38,7 +38,7 @@ export const PrefectureList: FC<Props> = ({
         `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${prefCode}`,
         {
           headers: {
-            'X-API-KEY': process.env.NEXT_PUBLIC_RESAS_APIKEY,
+            'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
           },
         }
       )
