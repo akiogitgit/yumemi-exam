@@ -1,4 +1,11 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 import { Prefectures } from '../types/prefectures'
 import { PrefPopulations } from '../types/prefPopulations'
 
@@ -25,43 +32,52 @@ export const PrefectureList: FC<Props> = ({
   }, [])
 
   // 都道府県のデータを取得
-  const addPrefData = (prefCode: string, prefName: string) => {
-    fetch(
-      `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${prefCode}`,
-      {
-        headers: {
-          'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        setPrefPopulations([
-          ...prefPopulations,
-          { data: res.result.data[0].data, prefName: prefName },
-        ])
-      })
-  }
+  const addPrefData = useCallback(
+    (prefCode: string, prefName: string) => {
+      fetch(
+        `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${prefCode}`,
+        {
+          headers: {
+            'X-API-KEY': String(process.env.NEXT_PUBLIC_RESAS_APIKEY),
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          setPrefPopulations([
+            ...prefPopulations,
+            { data: res.result.data[0].data, prefName: prefName },
+          ])
+        })
+    },
+    [prefPopulations, setPrefPopulations]
+  )
 
   // 指定された都道府県のデータを削除
-  const deletePrefData = (deleteIndex: number) => {
-    const newData: PrefPopulations[] = prefPopulations
-    newData.splice(deleteIndex, 1)
-    setPrefPopulations([...newData])
-  }
+  const deletePrefData = useCallback(
+    (deleteIndex: number) => {
+      const newData: PrefPopulations[] = prefPopulations
+      newData.splice(deleteIndex, 1)
+      setPrefPopulations([...newData])
+    },
+    [prefPopulations, setPrefPopulations]
+  )
 
-  const changePrefectures = (prefCode: string, prefName: string) => {
-    let flug = true
-    prefPopulations.map((object, index) => {
-      if (object.prefName === prefName && flug) {
-        deletePrefData(index)
-        flug = false
+  const changePrefectures = useCallback(
+    (prefCode: string, prefName: string) => {
+      let flug = true
+      prefPopulations.map((object, index) => {
+        if (object.prefName === prefName && flug) {
+          deletePrefData(index)
+          flug = false
+        }
+      })
+      if (flug) {
+        addPrefData(prefCode, prefName)
       }
-    })
-    if (flug) {
-      addPrefData(prefCode, prefName)
-    }
-  }
+    },
+    [prefPopulations, setPrefPopulations]
+  )
 
   return (
     <section>
