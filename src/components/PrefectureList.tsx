@@ -65,14 +65,14 @@ export const PrefectureList: FC<Props> = ({
 
   const changePrefectures = useCallback(
     (prefCode: string, prefName: string) => {
-      let flug = true
+      let flag = true
       prefPopulations.map((object, index) => {
-        if (object.prefName === prefName && flug) {
+        if (object.prefName === prefName && flag) {
           deletePrefData(index)
-          flug = false
+          flag = false
         }
       })
-      if (flug) {
+      if (flag) {
         addPrefData(prefCode, prefName)
       }
     },
