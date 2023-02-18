@@ -63,6 +63,7 @@ export const PrefectureList: FC<Props> = ({
     [prefPopulations, setPrefPopulations]
   )
 
+  // 適当にコメント追加した
   const changePrefectures = useCallback(
     (prefCode: string, prefName: string) => {
       let flag = true
