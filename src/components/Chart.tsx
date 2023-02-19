@@ -9,6 +9,7 @@ interface Props {
   prefPopulations: PrefPopulations[]
 }
 
+// 適当なコメント
 export const Chart: FC<Props> = ({ prefPopulations }) => {
   let series: Series[] = []
   let yearArr: number[] = []
