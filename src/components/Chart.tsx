@@ -5,7 +5,7 @@ import { FC } from 'react'
 import { PrefPopulations } from '../types/prefPopulations'
 import { Series } from '../types/series.'
 
-// 意味のないコメント追加
+// 意味のないコメント追加意味のないコメント追加
 interface Props {
   prefPopulations: PrefPopulations[]
 }
